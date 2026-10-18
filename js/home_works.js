@@ -75,10 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //дз2
 //1
-const secondsDisplay = document.getElementById('seconds');
-const startButton = document.getElementById('start');
-const stopButton = document.getElementById('stop');
-const resetButton = document.getElementById('reset');
+const secondsDisplay = document.querySelector('#seconds');
+const startButton = document.querySelector('#start');
+const stopButton = document.querySelector('#stop');
+const resetButton = document.querySelector('#reset');
 
 if (secondsDisplay && startButton && stopButton && resetButton) {
     let seconds = 0;
