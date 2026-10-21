@@ -138,3 +138,157 @@ if (slides.length > 1) {
     }, 5000);
 }
 });
+
+//дз3 
+
+
+function delay(value, ms, shouldFail = false) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (shouldFail) {
+        reject(new Error(`Ошибка при обработке: ${value}`));
+      } else {
+        resolve(value);
+      }
+    }, ms);
+  });
+}
+
+//1
+
+delay(1, 500)
+  .then(value => {
+    console.log("Шаг 1:", value);
+
+    return delay(value + 1, 500, true);
+  })
+  .then(value => {
+    console.log("Шаг 2:", value);
+
+    return delay(value + 1, 500);
+  })
+  .then(value => {
+    console.log("Шаг 3:", value);
+    return value;
+  })
+  .catch(error => {
+    console.log("Поймали ошибку:", error.message);
+  })
+  .finally(() => {
+    console.log("Цепочка завершена");
+  });
+
+//2
+
+async function runMath() {
+  try {
+    const first = await delay(1, 500);
+    console.log("Шаг 1:", first);
+
+    const second = await delay(first + 1, 500, true);
+    console.log("Шаг 2:", second);
+
+    const third = await delay(second + 1, 500);
+    console.log("Шаг 3:", third);
+  } catch (error) {
+    console.log("Поймали ошибку:", error.message);
+  } finally {
+    console.log("Цепочка завершена");
+  }
+}
+
+runMath();
+
+//3
+
+async function runArray() {
+  const numbers = [10, 20, 30, 40];
+  const results = [];
+
+  for (const value of numbers) {
+    try {
+      const shouldFail = Math.random() > 0.7;
+
+      const result = await delay(
+        value,
+        500,
+        shouldFail
+      );
+
+      results.push({
+        value: result,
+        error: null
+      });
+    } catch (error) {
+      results.push({
+        value,
+        error: error.message
+      });
+    }
+  }
+
+  console.log(results);
+  return results;
+}
+
+runArray();
+
+//4
+
+async function runPromiseAll() {
+  try {
+    const results = await Promise.all([
+      delay("A", 1000),
+      delay("B", 500, true),
+      delay("C", 1500),
+      delay("D", 700)
+    ]);
+
+    console.log("Результаты:", results);
+  } catch (error) {
+    console.log("Promise.all:", error.message);
+  }
+}
+
+runPromiseAll();
+
+//5
+
+async function runPromiseAllSettled() {
+  const results = await Promise.allSettled([
+    delay("A", 1000),
+    delay("B", 500, true),
+    delay("C", 1500),
+    delay("D", 700)
+  ]);
+
+  const succeeded = results
+    .filter(item => item.status === "fulfilled")
+    .map(item => item.value);
+
+  const failed = results
+    .filter(item => item.status === "rejected")
+    .map(item => item.reason.message);
+
+  console.log("Успешные:", succeeded);
+  console.log("Ошибки:", failed);
+}
+
+runPromiseAllSettled();
+
+//6
+
+async function runPromiseRace() {
+  try {
+    const result = await Promise.race([
+      delay("Полезный результат", 2000),
+      delay("Таймаут", 500, true)
+    ]);
+
+    console.log("Результат:", result);
+  } catch (error) {
+    console.log("Гонка завершилась ошибкой:", error.message);
+  }
+}
+
+runPromiseRace();
