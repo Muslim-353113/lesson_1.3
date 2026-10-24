@@ -1,17 +1,17 @@
 [
   {
-    "name": "",
-    "age": 0,
-    "photo": "url"
+    "name": "Michael Jackson",
+    "age": 50,
+    "person_photo": "https://thumbs.dfs.ivi.ru/storage0/contents/5/7/9fc647126b4b5da62bdecdba8e274c.jpg"
   },
   {
-    "name": "",
-    "age": 0,
-    "photo": "url"
+    "name": "Johnny Depp",
+    "age": 63,
+    "person_photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Johnny_Depp_%28July_2009%29_2.jpg/250px-Johnny_Depp_%28July_2009%29_2.jpg?utm_source=ru.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
   },
   {
-    "name": "",
-    "age": 0,
-    "photo": "url"
+    "name": "Robert Downey Jr.",
+    "age": 61,
+    "person_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQF0pWd4CPNIGey2izgOvz3e4KrhUkZ4uH57riuzVxow&s=10"
   }
 ]

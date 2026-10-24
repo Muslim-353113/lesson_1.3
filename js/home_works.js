@@ -292,3 +292,68 @@ async function runPromiseRace() {
 }
 
 runPromiseRace();
+
+//дз4
+//1
+const charactersList = document.querySelector(".characters-list");
+
+async function getCharacters() {
+  try {
+    const response = await fetch("../data/characters.json");
+
+    if (!response.ok) {
+      throw new Error("Не удалось загрузить characters.json");
+    }
+
+    const characters = await response.json();
+
+    charactersList.innerHTML = "";
+
+    characters.forEach((character) => {
+      const card = document.createElement("div");
+      card.classList.add("character-card");
+
+      const photoContainer = document.createElement("div");
+      photoContainer.classList.add("character-photo");
+
+      const img = document.createElement("img");
+      img.src = character.person_photo;
+      img.alt = character.name;
+      img.loading = "lazy";
+
+      // Если фотография не загрузилась
+      img.addEventListener("error", () => {
+        img.style.display = "none";
+        photoContainer.textContent = "Фото недоступно";
+      }, { once: true });
+
+      const name = document.createElement("h2");
+      name.textContent = character.name;
+
+      const age = document.createElement("p");
+      age.textContent = `Возраст: ${character.age}`;
+
+      photoContainer.append(img);
+      card.append(photoContainer, name, age);
+
+      charactersList.append(card);
+    });
+
+  } catch (error) {
+    console.error("Ошибка:", error);
+
+    charactersList.textContent =
+      "Не удалось загрузить персонажей. Проверь JSON и запусти проект через локальный сервер.";
+  }
+}
+
+getCharacters();
+//2
+fetch('../data/bio.json')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.log('Ошибка:', error);
+    });
