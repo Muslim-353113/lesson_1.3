@@ -227,3 +227,60 @@
     height: 100%;
     object-fit: cover;
 }
+
+.dz5{
+    background-color: #000;
+}
+
+h2 {
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.checkbox-label,
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: orange;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background: black;
+    cursor: not-allowed;
+}
+
+#message {
+    max-width: 400px;
+    margin: 20px auto;
+    overflow-wrap: anywhere;
+}
+
+#result_1 {
+     max-width: 400px;
+    margin: 20px auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}

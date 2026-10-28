@@ -357,3 +357,134 @@ fetch('../data/bio.json')
     .catch(error => {
         console.log('Ошибка:', error);
     });
+
+//дз5
+const form = document.querySelector("#registrationForm");
+const message = document.querySelector("#message");
+const result_1 = document.querySelector("#result_1");
+const submitBtn = document.querySelector("#submitBtn");
+
+const API_URL = "https://jsonplaceholder.typicode.com/posts";
+
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    message.textContent = "";
+    result.textContent = "";
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    const name = form.elements.name.value.trim();
+    const email = form.elements.email.value.trim();
+    const password = form.elements.password.value;
+    const age = Number(form.elements.age.value);
+    const gender = form.elements.gender.value;
+    const consent = form.elements.consent.checked;
+
+    if (name.length < 2 || name.length > 100) {
+        message.textContent = "Имя должно содержать от 2 до 100 символов.";
+        return;
+    }
+
+    if (!Number.isInteger(age) || age < 1 || age > 120) {
+        message.textContent = "Введите корректный возраст от 1 до 120 лет.";
+        return;
+    }
+
+    if (age < 18) {
+        message.textContent = "Отправка запрещена: вам должно быть не менее 18 лет.";
+        return;
+    }
+
+    if (!consent) {
+        message.textContent = "Необходимо согласиться на обработку данных.";
+        return;
+    }
+
+    if (password.length < 8 || password.length > 128) {
+        message.textContent = "Пароль должен содержать от 8 до 128 символов.";
+        return;
+    }
+
+    const requestType = form.querySelector(
+        'input[name="requestType"]:checked'
+    ).value;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Отправка...";
+
+    try {
+        let response;
+
+        if (requestType === "json") {
+
+            const userData = {
+                name: name,
+                email: email,
+                password: password,
+                age: age,
+                gender: gender,
+                consent: consent
+            };
+
+            response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(userData)
+            });
+
+        } else {
+
+            const formData = new FormData(form);
+
+            formData.delete("requestType");
+            formData.set("age", String(age));
+
+            response = await fetch(API_URL, {
+                method: "POST",
+                body: formData
+            });
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                `Ошибка HTTP: ${response.status} ${response.statusText}`
+            );
+        }
+
+        const responseText = await response.text();
+
+        if (!responseText.trim()) {
+            throw new Error("Сервер вернул пустой ответ.");
+        }
+        let data;
+        try {
+            data = JSON.parse(responseText);
+        } catch {
+            throw new Error("Сервер вернул некорректный JSON.");
+        }
+        if (data && typeof data === "object" && "password" in data) {
+            data.password = "[скрыто]";
+        }
+        message.textContent = "Данные успешно отправлены!";
+        result_1.textContent = JSON.stringify(data, null, 2);
+        console.log("Ответ сервера:", data);
+    } catch (error) {
+        if (error instanceof TypeError) {
+            message.textContent =
+                "Ошибка сети. Проверьте подключение к интернету.";
+        } else {
+            message.textContent = error.message ||
+                "Произошла неизвестная ошибка.";
+        }
+        console.error("Ошибка запроса:", error);
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Отправить";
+    }
+});
